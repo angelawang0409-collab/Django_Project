@@ -16,3 +16,4 @@ urlpatterns = [
     # Root URL includes all URLs from the books app and assigns a namespace
     path('', include('books.urls', namespace='books'))
 ]
+

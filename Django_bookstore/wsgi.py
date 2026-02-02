@@ -9,4 +9,3 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Django_bookstore.settings')
 
 # Creates the WSGI application object that the web server uses to communicate with Django
 application = get_wsgi_application()
-

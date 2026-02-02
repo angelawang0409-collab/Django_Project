@@ -1,7 +1,4 @@
 # Project information and required imports for Django configuration
-"""
-Django settings for Django_bookstore project.
-"""
 import os
 from pathlib import Path
 
@@ -105,5 +102,3 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
-# Deployment information such as the website URL where the project is hosted
-# Example: https://ym-djecom.herokuapp.com/
