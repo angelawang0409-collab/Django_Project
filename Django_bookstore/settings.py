@@ -95,10 +95,14 @@ STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 ]
+# Sets the URL path prefix for serving media files (user-uploaded files)
+MEDIA_URL = '/media/'
+
+# Defines the folder on your computer where uploaded media files are stored
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Login and logout settings including URLs for authentication
 # LOGIN_REDIRECT_URL defines where users go after login
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
-
