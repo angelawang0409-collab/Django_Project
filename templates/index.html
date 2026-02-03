@@ -1,0 +1,96 @@
+<!-- Extends the main layout so this page uses the shared navbar and styling -->
+{% extends 'base.html' %}
+
+<!-- Sets the page title shown in the browser tab -->
+{% block title %}Home - Online Bookstore{% endblock %}
+
+<!-- Main content area for the cart page -->
+{% block content %}
+    <!-- Search bar section -->
+    <div class="search-bar">
+        <h2 style="margin-bottom: 1rem;">Search Books</h2>
+
+        <!-- Search form: sends GET request to book list page -->
+        <form action="{% url 'books:book_list' %}" method="get">
+
+            <!-- Search input (keeps previous search value) -->
+            <input type="text" name="search" 
+                placeholder="Enter title, author, or ISBN..." 
+                value="{{ request.GET.search }}"
+                style="font-family: 'Poppins', sans-serif;">
+
+            <!-- Category dropdown -->
+            <select name="category" style="font-family: 'Poppins', sans-serif;">
+                <option value="">All Categories</option>
+
+                <!-- Loop through all categories -->
+                {% for category in categories %}
+                    <option value="{{ category.id }}" 
+                            {% if category.id == request.GET.category %}selected{% endif %}>
+                        {{ category.name }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-primary" style="font-family: 'Poppins', sans-serif;">Search</button>
+        </form>
+    </div>
+
+    <!-- Latest books heading -->
+    <h2 style="margin: 2rem 0 1rem;">Latest Books</h2>
+
+    <!-- Books table -->
+    <table class="books-table" style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr>
+                <!-- Table headers -->
+                <th style="border: 1px solid #ddd; padding: 8px;">Cover</th>
+                <th style="border: 1px solid #ddd; padding: 8px;">Title</th>
+                <th style="border: 1px solid #ddd; padding: 8px;">Author</th>
+                <th style="border: 1px solid #ddd; padding: 8px;">Price</th>
+                <th style="border: 1px solid #ddd; padding: 8px;">Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <!-- Loop through latest books -->
+            {% for book in books %}
+            <tr>
+
+                <!-- Book cover (fallback image if missing) -->
+                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">
+                    <img src="{{ book.cover_image.url|default:'https://via.placeholder.com/100x150?text=Cover' }}" 
+                        alt="{{ book.title }}" 
+                        style="width: 100px; height: auto;">
+                </td>
+
+                <!-- Book title -->
+                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">
+                    {{ book.title }}
+                </td>
+
+                <!-- Book author -->
+                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">
+                    {{ book.author }}
+                </td>
+
+                <!-- Book price -->
+                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">
+                    ${{ book.price }}
+                </td>
+
+                <!-- View details button -->
+                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">
+                    <a href="{% url 'books:book_detail' book.id %}" 
+                    class="btn btn-primary" 
+                    style="text-decoration: none;">
+                        View Details
+                    </a>
+                </td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

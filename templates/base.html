@@ -1,0 +1,108 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Page title (child templates can override this block) -->
+    <title>{% block title %}OBS{% endblock %}</title>
+
+    <!-- Link to global CSS file stored in /static/css/base.css -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
+    <!-- Add Poppins font here -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- Navigation Bar (visible on every page) -->
+    <div class="navbar">
+        <div class="container">
+
+            <!-- Website title -->
+            <h1>Online Bookstore</h1>
+
+            <!-- Navigation links -->
+            <nav>
+                <a href="/">HOME</a>
+
+                <!-- If user is logged in, show member-only links -->
+                {% if user.is_authenticated %}
+                    <a href="{% url 'books:cart' %}">Cart</a>
+                    <a href="{% url 'books:order_list' %}">My Order</a>
+                    <a href="/admin/">Admin</a>
+
+                    <!-- Logout button (POST request for security) -->
+                    <form method="post" action="{% url 'logout' %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-link" 
+                                style="color: white; text-decoration: none; margin-left: 0; border: none; background: none; font-family: 'Poppins'">
+                            Logout
+                        </button>
+                    </form>
+
+                <!-- If user is NOT logged in, show login link -->
+                {% else %}
+                    <a href="{% url 'login' %}">Member Login</a>
+                {% endif %}
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main content area (child templates insert their content here) -->
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- JavaScript section for interactive features -->
+    <script>
+        // Function to send POST request to add a book to the cart
+        function addToCart(bookId) {
+            fetch(`/add-to-cart/${bookId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'), // include CSRF token for security
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Show message depending on success or failure
+                if (data.success) {
+                    alert('Added to cart successfully!');
+                } else {
+                    alert('Failed to add to cart. Please try again.');
+                }
+            });
+        }
+
+        // Helper function to retrieve CSRF token from browser cookies
+        function getCookie(name) {
+            let cookieValue = null;
+
+            // Check if cookies exist
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+
+                // Loop through cookies to find the one we need
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+
+                    // Match cookie name
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    </script>
+
+    <!-- Extra JavaScript block for pages that need additional scripts -->
+    {% block extra_js %}{% endblock %}
+
+</body>
+</html>
+
