@@ -7,7 +7,7 @@
 
 /* Body base styling */
 body {
-    font-family: "Poppins", "Segoe UI", sans-serif;
+    font-family: "Poppins", sans-serif;
     line-height: 1.6;
     background: #f5f5f5;
 }
@@ -272,6 +272,7 @@ body {
     background: #d1fae5;
     color: #065f46;
     border: 1px solid #6ee7b7;
+    margin: 2rem 0;
 }
 
 /* Error alert */
