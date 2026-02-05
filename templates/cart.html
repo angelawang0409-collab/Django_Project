@@ -1,0 +1,100 @@
+<!-- Extends the main layout so this page uses the shared navbar and styling -->
+{% extends 'base.html' %}
+
+<!-- Sets the page title shown in the browser tab -->
+{% block title %}Cart - Online Bookstore{% endblock %}
+
+<!-- Main content area for the cart page -->
+{% block content %}
+
+<!-- Page heading -->
+<h2 style="margin: 3.5rem 0 1rem 0; font-size: 1.8rem; color: #000;">My Cart</h2>
+
+<!-- Check if the cart has items -->
+{% if cart_items %}
+
+<div class="cart-table">
+    <table>
+        <thead>
+            <tr>
+                <!-- Table headings -->
+                <th>Book</th>
+                <th>Unit Price</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <!-- Loop through each item in the cart -->
+            {% for item in cart_items %}
+            <tr>
+                <!-- Book title + author -->
+                <td>
+                    <strong>{{ item.book.title }}</strong><br>
+                    <span style="color: #666;">{{ item.book.author }}</span>
+                </td>
+
+                <!-- Price per book -->
+                <td>${{ item.book.price }}</td>
+
+                <!-- Quantity selected -->
+                <td>{{ item.quantity }}</td>
+
+                <!-- Subtotal for this item -->
+                <td style="color: #e53e3e; font-weight: bold;">
+                    ${{ item.subtotal }}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Total price and order button -->
+<div class="cart-total">
+    <h3>Total: ${{ total }}</h3>
+
+    <!-- Button triggers order creation -->
+    <button onclick="createOrder()" class="btn btn-success" 
+            style="margin-top: 1rem; font-size: 1.1rem; padding: 0.5rem 1.3rem;">
+        Place Order
+    </button>
+</div>
+
+{% else %}
+<!-- Message shown when the cart is empty -->
+<div class="alert alert-success">
+    Your cart is empty. <a href="/">Start shopping</a>!
+</div>
+{% endif %}
+
+<!-- JavaScript: handles order creation -->
+<script>
+function createOrder() {
+    // Confirm before placing the order
+    if (!confirm('Are you sure you want to place this order?')) return;
+
+    // Send POST request to create the order
+    fetch('/create-order/', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'), // CSRF token for security
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        // If successful, redirect to orders page
+        if (data.success) {
+            alert('Order created successfully!');
+            window.location.href = '/orders/';
+        } 
+        // If failed, show error message
+        else {
+            alert('Failed to create order: ' + data.error);
+        }
+    });
+}
+</script>
+
+{% endblock %}

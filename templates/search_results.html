@@ -1,0 +1,32 @@
+<!-- Extends the main layout so this page uses the shared navbar and styling -->
+{% extends 'base.html' %}
+
+<!-- Sets the page title shown in the browser tab -->
+{% block title %}Search{% endblock title %}
+
+<!-- Main content area for the cart page -->
+{% block content %}
+    <!-- Page heading -->
+    <h3 class="text-secondary">Search Results</h3>
+    <hr>
+
+    <!-- Loop through all search results -->
+    {% for every in object_list %}
+        <div>
+            <!-- Book title linking to detail page -->
+            <h3>
+                <a href="{% url 'detail' every.pk %}">
+                    {{ every.title }}
+                </a>
+            </h3>
+
+            <!-- Author name -->
+            <p>Author: {{ every.author }}</p>
+        </div>
+
+    {% empty %}
+        <!-- Message shown when no results are found -->
+        <h5 class="text-danger">Nothing found :(</h5>
+    {% endfor %}
+
+{% endblock content %}

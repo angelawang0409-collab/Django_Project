@@ -1,0 +1,119 @@
+<!-- Extends the main layout so this page uses the shared navbar and styling -->
+{% extends 'base.html' %}
+
+<!-- Sets the page title shown in the browser tab -->
+{% block title %}My Order - Online Bookstore{% endblock %}
+
+<!-- Main content area for the cart page -->
+{% block content %}
+    <!-- Main Content Container -->
+    <div class="container">
+
+        <!-- Page heading -->
+        <h2 style="margin: 2rem 0 1rem 0; font-size: 1.8rem; color: #000;">My Orders</h2>
+
+        <!-- Check if the user has any orders -->
+        {% if orders %}
+
+            <!-- Loop through each order -->
+            {% for order in orders %}
+                <div class="order-card">
+
+                    <!-- Order Header: order number + date + status -->
+                    <div class="order-header">
+                        <div>
+                            <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem;">
+                                Order #{{ order.order_number }}
+                            </h3>
+
+                            <!-- Order creation date -->
+                            <p style="color: #666; font-size: 0.9rem;">
+                                {{ order.created_at|date:"F d, Y H:i" }}
+                            </p>
+                        </div>
+
+                        <!-- Status badge (e.g., PENDING, SHIPPED, COMPLETED) -->
+                        <span class="status-badge status-{{ order.status }}">
+                            {{ order.get_status_display|default:order.status|upper }}
+                        </span>
+                    </div>
+
+                    <!-- Order Items Section -->
+                    <div style="margin: 1.5rem 0;">
+                        <h4 style="margin-bottom: 1rem; color: #333;">Order Items:</h4>
+
+                        <!-- Loop through all items in this order -->
+                        {% for item in order.items.all %}
+                            <div style="padding: 0.8rem 0; border-bottom: 1px solid #f0f0f0;">
+
+                                <!-- Item row layout -->
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+
+                                    <!-- Book details -->
+                                    <div>
+                                        <strong style="color: #333;">{{ item.book.title }}</strong>
+
+                                        <p style="color: #666; margin: 0.3rem 0; font-size: 0.9rem;">
+                                            by {{ item.book.author }}
+                                        </p>
+
+                                        <!-- Quantity × price -->
+                                        <p style="color: #888; font-size: 0.9rem;">
+                                            Quantity: {{ item.quantity }} × ${{ item.price }}
+                                        </p>
+                                    </div>
+
+                                    <!-- Item subtotal -->
+                                    <div style="text-align: right;">
+                                        <strong style="color: #e53e3e; font-size: 1.1rem;">
+                                            ${{ item.price|floatformat:2 }}
+                                        </strong>
+                                    </div>
+
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Order Footer: shipping address + total amount -->
+                    <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 2px solid #f7fafc;">
+
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+
+                            <!-- Shipping address -->
+                            <div>
+                                <p style="color: #666; margin-bottom: 0.5rem;">
+                                    <strong>Shipping Address:</strong>
+                                </p>
+                                <p style="color: #888;">{{ order.shipping_address }}</p>
+                            </div>
+
+                            <!-- Total amount -->
+                            <div style="text-align: right;">
+                                <p style="color: #666; margin-bottom: 0.3rem;">Total Amount</p>
+                                <h3 class="book-price" style="margin: 0;">
+                                    ${{ order.total_amount }}
+                                </h3>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            {% endfor %}
+
+        {% else %}
+            <!-- Message when user has no orders -->
+            <div class="alert alert-success">
+                <h4 style="margin-bottom: 0.5rem;">No orders yet</h4>
+                <p>You haven't placed any orders yet.</p>
+            </div>
+        {% endif %}
+
+        <!-- Back to Home button -->
+        <div style="margin: 2rem 0;">
+            <a href="/" class="btn btn-primary" style="text-decoration: none;">Back to Home</a>
+        </div>
+
+    </div>
+{% endblock %}

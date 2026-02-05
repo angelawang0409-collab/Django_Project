@@ -1,0 +1,89 @@
+<!-- Extends the main layout so this page uses the shared navbar and styling -->
+{% extends 'base.html' %}
+
+<!-- Sets the page title shown in the browser tab -->
+{% block title %}Home - Online Bookstore{% endblock %}
+
+<!-- Main content area for the cart page -->
+{% block content %}
+
+<!-- Search section at the top of the homepage -->
+<div class="search-bar">
+    <h2 style="margin-bottom: 1rem;">Search Books</h2>
+
+    <!-- Search form: sends GET request to book list page -->
+    <form action="{% url 'books:book_list' %}" method="get">
+
+        <!-- Search input (keeps previous search term) -->
+        <input type="text" name="search" 
+               placeholder="Enter title, author, or ISBN..." 
+               value="{{ request.GET.search }}">
+
+        <!-- Category dropdown -->
+        <select name="category" style="font-family: 'Poppins', sans-serif;">
+            <option value="">All Categories</option>
+
+            <!-- Loop through all categories -->
+            {% for category in categories %}
+                <option value="{{ category.id }}"
+                        {% if category.id == request.GET.category %}selected{% endif %}>
+                    {{ category.name }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <!-- Search button -->
+        <button type="submit" class="btn btn-primary" style="font-family: 'Poppins', sans-serif;">Search</button>
+    </form>
+</div>
+
+<!-- Latest books heading -->
+<h2 style="margin: 2rem 0 1rem;">Latest Books</h2>
+
+<!-- Grid layout for book cards -->
+<div class="books-grid">
+
+    <!-- Loop through each book -->
+    {% for book in books %}
+    <div class="book-card">
+
+        <!-- Book cover image -->
+        <div>
+            {% if book.cover_image %}
+                <!-- Display uploaded cover -->
+                <img src="{{ book.cover_image.url }}" alt="{{ book.title }}"
+                     style="width: 100%; height: auto; max-width: 400px; 
+                            border-radius: 8px; object-fit: contain;">
+            {% else %}
+                <!-- Fallback placeholder -->
+                <img src="https://via.placeholder.com/400x500?text=Book+Cover" 
+                     alt="No Cover Available"
+                     style="width: 100%; height: auto; max-width: 400px; 
+                            border-radius: 8px; object-fit: contain;">
+            {% endif %}
+        </div>
+
+        <!-- Book information -->
+        <div class="book-info">
+
+            <!-- Title -->
+            <div class="book-title">{{ book.title }}</div>
+
+            <!-- Author -->
+            <div class="book-author">{{ book.author }}</div>
+
+            <!-- Price -->
+            <div class="book-price">${{ book.price }}</div>
+
+            <!-- View details button -->
+            <a href="{% url 'books:book_detail' book.id %}" 
+               class="btn btn-primary"
+               style="width: 100%; text-align: center; text-decoration: none; display: block;">
+                View Details
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
