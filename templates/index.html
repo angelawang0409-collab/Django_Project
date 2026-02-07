@@ -60,7 +60,7 @@
 
                 <!-- Book cover (fallback image if missing) -->
                 <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">
-                    <img src="{{ book.cover_image.url|default:'https://via.placeholder.com/100x150?text=Cover' }}" 
+                    <img src="{{ book.cover_image.url|default:'https://placehold.co/400x500/e0e0e0/666666?text=No+Cover+Available' }}" 
                         alt="{{ book.title }}" 
                         style="width: 100px; height: auto;">
                 </td>

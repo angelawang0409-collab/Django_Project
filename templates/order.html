@@ -6,7 +6,7 @@
 
 <!-- Main content area for the cart page -->
 {% block content %}
-    <!-- Main Content Container -->
+    <!-- Main content container -->
     <div class="container">
 
         <!-- Page heading -->
@@ -19,7 +19,7 @@
             {% for order in orders %}
                 <div class="order-card">
 
-                    <!-- Order Header: order number + date + status -->
+                    <!-- Order header: order number + date + status -->
                     <div class="order-header">
                         <div>
                             <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem;">
@@ -69,7 +69,6 @@
                                             ${{ item.price|floatformat:2 }}
                                         </strong>
                                     </div>
-
                                 </div>
                             </div>
                         {% endfor %}
@@ -95,10 +94,8 @@
                                     ${{ order.total_amount }}
                                 </h3>
                             </div>
-
                         </div>
                     </div>
-
                 </div>
             {% endfor %}
 

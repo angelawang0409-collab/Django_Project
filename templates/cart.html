@@ -13,43 +13,58 @@
 <!-- Check if the cart has items -->
 {% if cart_items %}
 
+<!-- Container for the shopping cart table -->
 <div class="cart-table">
+    
+    <!-- Start of the HTML table -->
     <table>
+        
+        <!-- Table header: defines column titles -->
         <thead>
             <tr>
-                <!-- Table headings -->
+                <!-- Column for the book title and author -->
                 <th>Book</th>
+                <!-- Column for the price of a single book -->
                 <th>Unit Price</th>
+                <!-- Column for the quantity of the book in the cart -->
                 <th>Quantity</th>
+                <!-- Column for the subtotal (price × quantity) -->
                 <th>Subtotal</th>
             </tr>
         </thead>
 
+        <!-- Table body: will display each item in the cart -->
         <tbody>
-            <!-- Loop through each item in the cart -->
+            <!-- Django template loop: repeat the following <tr> for every item in cart_items -->
             {% for item in cart_items %}
             <tr>
-                <!-- Book title + author -->
+                <!-- Book title and author column -->
                 <td>
+                    <!-- Display the book title in bold -->
                     <strong>{{ item.book.title }}</strong><br>
+                    <!-- Display the author in smaller, grey text -->
                     <span style="color: #666;">{{ item.book.author }}</span>
                 </td>
 
-                <!-- Price per book -->
-                <td>${{ item.book.price }}</td>
+                <!-- Price per single book -->
+                <td>
+                    ${{ item.book.price }} <!-- Access the price of this book -->
+                </td>
 
-                <!-- Quantity selected -->
-                <td>{{ item.quantity }}</td>
+                <!-- Quantity of this book in the cart -->
+                <td>
+                    {{ item.quantity }} <!-- Access the quantity property of the item -->
+                </td>
 
-                <!-- Subtotal for this item -->
+                <!-- Subtotal for this specific book (price × quantity) -->
                 <td style="color: #e53e3e; font-weight: bold;">
-                    ${{ item.subtotal }}
+                    ${{ item.subtotal }} <!-- Display the subtotal in bold red -->
                 </td>
             </tr>
-            {% endfor %}
+            {% endfor %} 
         </tbody>
-    </table>
-</div>
+    </table> 
+</div> 
 
 <!-- Total price and order button -->
 <div class="cart-total">
@@ -82,8 +97,8 @@ function createOrder() {
             'X-CSRFToken': getCookie('csrftoken'), // CSRF token for security
         }
     })
-    .then(response => response.json())
-    .then(data => {
+    .then(response => response.json())  // Convert the server's JSON response into a JavaScript object
+    .then(data => {  // Use the parsed data to handle the result of the request
         // If successful, redirect to orders page
         if (data.success) {
             alert('Order created successfully!');

@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
     <!-- Page title (child templates can override this block) -->
-    <title>{% block title %}OBS{% endblock %}</title>
+    <title>{% block title %}Online Bookstore{% endblock %}</title>
 
     <!-- Link to global CSS file stored in /static/css/base.css -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
@@ -17,26 +17,33 @@
 
 <body>
 
-    <!-- Navigation Bar (visible on every page) -->
+    <!-- NAVIGATION BAR - Top navigation menu visible on every page of the website -->
     <div class="navbar">
+        <!-- Container to center and constrain navbar content -->
         <div class="container">
 
-            <!-- Website title -->
+            <!-- Website title/logo displayed on the left side of navbar -->
             <h1>Online Bookstore</h1>
 
-            <!-- Navigation links -->
+            <!-- Navigation links section on the right side of navbar -->
             <nav>
+                <!-- Home link - always visible to all users -->
                 <a href="/">HOME</a>
 
-                <!-- If user is logged in, show member-only links -->
+                <!-- AUTHENTICATED USER MENU - Only displays if user is logged in -->
                 {% if user.is_authenticated %}
+                    <!-- Shopping cart link -->
                     <a href="{% url 'books:cart' %}">Cart</a>
+                    <!-- User's order history link -->
                     <a href="{% url 'books:order_list' %}">My Order</a>
+                    <!-- Django admin panel link -->
                     <a href="/admin/">Admin</a>
 
-                    <!-- Logout button (POST request for security) -->
+                    <!-- Logout button - Uses POST method for security (prevents CSRF attacks) -->
                     <form method="post" action="{% url 'logout' %}" style="display:inline;">
+                        <!-- CSRF token required for all POST requests in Django -->
                         {% csrf_token %}
+                        <!-- Styled button that looks like a link to match other nav items -->
                         <button type="submit"
                                 class="btn btn-link"
                                 style="
@@ -51,33 +58,37 @@
                         </button>
                     </form>
 
-                <!-- If user is NOT logged in, show login link -->
+                <!-- GUEST USER MENU - Only displays if user is NOT logged in -->
                 {% else %}
+                    <!-- Login link for users who haven't authenticated yet -->
                     <a href="{% url 'login' %}">Member Login</a>
                 {% endif %}
             </nav>
         </div>
     </div>
 
-    <!-- Main content area (child templates insert their content here) -->
+    <!-- MAIN CONTENT AREA - Where child templates (like home, cart, orders) insert their specific content -->
     <div class="container">
         {% block content %}{% endblock %}
     </div>
 
-    <!-- JavaScript section for interactive features -->
+    <!-- JAVASCRIPT SECTION - Interactive features and utility functions -->
     <script>
-        // Function to send POST request to add a book to the cart
+        // ADD TO CART FUNCTION - Sends AJAX request to add a book to user's shopping cart
         function addToCart(bookId) {
+            // Send POST request to server with the book ID
             fetch(`/add-to-cart/${bookId}/`, {
                 method: 'POST',
                 headers: {
-                    'X-CSRFToken': getCookie('csrftoken'), // include CSRF token for security
+                    'X-CSRFToken': getCookie('csrftoken'), // Security token required by Django
                     'Content-Type': 'application/json',
                 }
             })
+            // Convert server response to JSON format
             .then(response => response.json())
+            // Handle the response data
             .then(data => {
-                // Show message depending on success or failure
+                // Display appropriate message based on whether operation succeeded or failed
                 if (data.success) {
                     alert('Added to cart successfully!');
                 } else {
@@ -86,30 +97,33 @@
             });
         }
 
-        // Helper function to retrieve CSRF token from browser cookies
+        // GET COOKIE HELPER FUNCTION - Retrieves CSRF token from browser cookies for secure POST requests
         function getCookie(name) {
             let cookieValue = null;
 
-            // Check if cookies exist
+            // Check if any cookies exist in the browser
             if (document.cookie && document.cookie !== '') {
+                // Split all cookies into an array (cookies are separated by semicolons)
                 const cookies = document.cookie.split(';');
 
-                // Loop through cookies to find the one we need
+                // Loop through each cookie to find the one we're looking for
                 for (let i = 0; i < cookies.length; i++) {
                     const cookie = cookies[i].trim();
 
-                    // Match cookie name
+                    // Check if this cookie matches the name we're searching for
                     if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        // Extract and decode the cookie value, then exit the loop
                         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                         break;
                     }
                 }
             }
+            // Return the cookie value (or null if not found)
             return cookieValue;
         }
     </script>
 
-    <!-- Extra JavaScript block for pages that need additional scripts -->
+    <!-- EXTRA JAVASCRIPT BLOCK - Allows child templates to add their own custom scripts -->
     {% block extra_js %}{% endblock %}
 
 </body>

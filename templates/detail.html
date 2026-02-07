@@ -8,9 +8,7 @@
 {% block content %}
     <!-- Main book detail container -->
     <div class="book-card" 
-         style="background: white; padding: 2rem; border-radius: 8px; 
-                box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 2rem; 
-                display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
+         style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 2rem; display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
         
         <!-- Left column: Book cover image -->
         <div>
@@ -21,7 +19,7 @@
                             border-radius: 8px; object-fit: contain; margin-top: 9px;">
             {% else %}
                 <!-- Fallback placeholder image -->
-                <img src="https://via.placeholder.com/400x500?text=Book+Cover" 
+                <img src="https://placehold.co/400x500/e0e0e0/666666?text=No+Cover+Available" 
                      alt="No Cover Available"
                      style="width: 100%; height: auto; max-width: 400px; 
                             border-radius: 8px; object-fit: contain;">
@@ -71,23 +69,30 @@
                 </p>
             </div>
 
-            <!-- Add to Cart button (only if in stock) -->
-            {% if book.stock > 0 %}
-                <button onclick="addToCart('{{ book.id }}')" 
-                        class="btn btn-success" 
-                        style="font-size: 1.1rem; width: 180px; height: 50px;">
-                    Add to Cart
-                </button>
+            <!-- Add to Cart button (only if user is logged in and book is in stock) -->
+            {% if user.is_authenticated %}
+                {% if book.stock > 0 %}
+                    <button onclick="addToCart('{{ book.id }}')" 
+                            class="btn btn-success" 
+                            style="font-size: 1.1rem; width: 180px; height: 50px;">
+                        Add to Cart
+                    </button>
+                {% else %}
+                    <!-- Disabled button when out of stock -->
+                    <button class="btn" 
+                            style="background: #ccc; color: #666; cursor: not-allowed; font-size: 1.1rem; width: 180px; height: 50px;" 
+                            disabled>
+                        Out of Stock
+                    </button>
+                {% endif %}
             {% else %}
-                <!-- Disabled button when out of stock -->
-                <button class="btn" 
-                        style="background: #ccc; color: #666; cursor: not-allowed; 
-                               font-size: 1.1rem; width: 180px; height: 50px;" 
-                        disabled>
-                    Out of Stock
-                </button>
+                <!-- Login button for guests -->
+                <a href="{% url 'login' %}" 
+                class="btn btn-primary" 
+                style="font-size: 1.1rem; width: 210px; height: 50px; display: flex; align-items: center; justify-content: center;  text-decoration: none; background: #764ba2; color: white;">
+                    Login to Purchase
+                </a>
             {% endif %}
-
         </div>
     </div>
 {% endblock %}
