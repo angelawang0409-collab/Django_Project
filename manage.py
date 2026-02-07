@@ -20,9 +20,7 @@ def main():
         # Raises an error if Django is not installed or not accessible
         raise ImportError(
             # Error message explaining the possible cause of the issue
-            "Couldn't import Django. Are you sure it's installed and "
-            "available on your PYTHONPATH environment variable? Did you "
-            "forget to activate a virtual environment?"
+            "Couldn't import Django. Are you sure it's installed and available on your PYTHONPATH environment variable? Did you forget to activate a virtual environment?"
         ) from exc
     # Executes the Django command using the provided command-line arguments
     execute_from_command_line(sys.argv)

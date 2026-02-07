@@ -10,8 +10,8 @@ from django.views import generic
 # Define a class-based view for handling user signup/registration
 class SignUpView(generic.CreateView):
     # Specify the form class to use for creating new users
-    form_class    = UserCreationForm
+    form_class = UserCreationForm
     # Define the URL to redirect to after successful form submission (goes to login page)
-    success_url   = reverse_lazy('login')
+    success_url = reverse_lazy('login')
     # Specify the template file to render for displaying the signup form
     template_name = 'signup.html'

@@ -61,7 +61,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'Django_bookstore.wsgi.application'
 
 # Database configuration using SQLite for local development
-# Can be replaced with other databases like PostgreSQL or MySQL in production
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -78,7 +77,7 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# Internationalization settings for language, timezone, and formatting
+# Internationalisation settings for language, timezone, and formatting
 # Makes the project suitable for users in different regions
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'

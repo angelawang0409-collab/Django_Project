@@ -7,7 +7,6 @@ from django.db.models import Q
 from decimal import Decimal
 from datetime import datetime
 
-# Comment indicating model imports section
 # Import your models
 # Import Book, Category, Customer, Order, and OrderItem models from the current app
 from .models import Book, Category, Customer, Order, OrderItem
@@ -29,7 +28,7 @@ def index(request):
         'categories': categories,
     }
     # Render the index.html template with the context data and return the response
-    return render(request, 'index.html', context)  # Changed!
+    return render(request, 'index.html', context) 
 
 
 # Define the book_list view function
@@ -74,7 +73,7 @@ def book_list(request):
         'search_query': search_query,
     }
     # Render the list.html template with the context data and return the response
-    return render(request, 'list.html', context)  # Changed!
+    return render(request, 'list.html', context)  
 
 
 # Define the book_detail view function that takes request and book_id parameters
@@ -84,7 +83,7 @@ def book_detail(request, book_id):
     # Get the book with the specified ID or return a 404 error if not found
     book = get_object_or_404(Book, id=book_id)
     # Render the detail.html template with the book object and return the response
-    return render(request, 'detail.html', {'book': book})  # Changed!
+    return render(request, 'detail.html', {'book': book})  
 
 
 # Require user to be logged in to access this view
@@ -113,7 +112,7 @@ def add_to_cart(request, book_id):
             # Check if adding another would exceed available stock
             if cart[str(book_id)]['quantity'] >= book.stock:
                 # Return a JSON response indicating insufficient stock
-                return JsonResponse({'success': False, 'error': '库存不足'})
+                return JsonResponse({'success': False, 'error': 'Out of Stock'})
             # Increment the quantity of the existing cart item
             cart[str(book_id)]['quantity'] += 1
         # If book is not in cart yet
@@ -150,9 +149,9 @@ def cart(request):
     """Shopping cart"""
     # Get the cart from the session, or create an empty dictionary if it doesn't exist
     cart = request.session.get('cart', {})
-    # Initialize an empty list to store cart items with additional data
+    # Initialise an empty list to store cart items with additional data
     cart_items = []
-    # Initialize the total amount to zero
+    # Initialise the total amount to zero
     total = Decimal('0.00')
     
     # Iterate through each book ID and item data in the cart
@@ -213,7 +212,7 @@ def create_order(request):
         # Generate a unique order number using current timestamp
         order_number = f"ORD{datetime.now().strftime('%Y%m%d%H%M%S')}"
         
-        # Initialize the total amount to zero
+        # Initialise the total amount to zero
         total = Decimal('0.00')
         # Iterate through each book ID and item data in the cart
         for book_id, item in cart.items():
@@ -227,7 +226,7 @@ def create_order(request):
                     # Set success to False
                     'success': False, 
                     # Include error message with book title
-                    'error': f'《{book.title}》库存不足'
+                    'error': f'"{book.title}" is out of stock'
                 })
             
             # Add the item's total price to the order total
@@ -291,12 +290,10 @@ def order_list(request):
         customer = Customer.objects.get(user=request.user)
     # Catch the exception if the customer doesn't exist
     except Customer.DoesNotExist:
-        # Comment explaining the fallback behavior
         # If customer doesn't exist, create one
         # Create a new customer for the current user
         customer = Customer.objects.create(user=request.user)
     
-    # Comment explaining what this query does
     # Get orders for this customer
     # Query orders for this customer, ordered by creation date (newest first)
     orders = Order.objects.filter(customer=customer).order_by('-created_at')

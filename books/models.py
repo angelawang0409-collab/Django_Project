@@ -2,8 +2,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-
-# Model for book categories (e.g., Fiction, Programming, History)
+# Model for book categories 
 class Category(models.Model):
     # Fields: name, description, created timestamp
     name = models.CharField(max_length=100, verbose_name="Category Name")

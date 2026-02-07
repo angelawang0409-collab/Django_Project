@@ -29,18 +29,18 @@ Before running this project, make sure you have:
 
 Installation
 
-1. Clone the repository**
+1. Clone the repository
    ```bash
    git clone <your-repository-url>
    cd bookstore
    ```
 
-2. Create a virtual environment**
+2. Create a virtual environment
    ```bash
    python -m venv venv
    ```
 
-3. Activate the virtual environment**
+3. Activate the virtual environment
    
    On Windows:
    ```bash
@@ -52,12 +52,12 @@ Installation
    source venv/bin/activate
    ```
 
-4. Install dependencies**
+4. Install dependencies
    ```bash
    pip install django
    ```
 
-5. Run migrations**
+5. Run migrations
    ```bash
    python manage.py makemigrations
    python manage.py migrate
@@ -83,10 +83,16 @@ Database Models
 Book
 - Title
 - Author
+- ISBN
 - Category (Foreign Key)
 - Price
+- Stock
 - Description
+- Publisher
+- Publish Date
 - Cover image
+- Created date
+- Updated date
 
 Category
 - Name
@@ -95,18 +101,24 @@ Category
 Cart
 - User (Foreign Key)
 - Book (Foreign Key)
+- Price
 - Quantity
+- Subtotal
+- Total
 
 Order
 - User (Foreign Key)
-- Order date
-- Total amount
+- Order number
 - Status (Pending, Confirmed, Shipped, Delivered)
+- Total amount
+- Shipping address
+- Order date
+- Updated date
 
 Features in Detail
 
 For Customers
-1. Browse Books**: View all available books on the homepage
+1. Browse Books: View all available books on the homepage
 2. Search: Search for books by title or author
 3. Filter: Filter books by category
 4. Add to Cart: Click "Add to Cart" to add books
